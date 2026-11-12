@@ -1,0 +1,100 @@
+Git Commands Used - Kuber Mehta (2024eb01487)
+Repository: https://github.com/Kuberwastaken/SDP-SGA2
+
+STEP 1 - Local Repository Setup
+
+git init -b main
+  Creates a new empty Git repo in the current folder (makes a hidden .git folder)
+  and names the default branch "main".
+
+git config user.name "Kuber Mehta"
+git config user.email "kuberhob@gmail.com"
+  Sets the author name and email for commits in this repo only.
+
+STEP 2 - Git Workflow
+
+git status
+  Shows which files are changed, staged, or untracked.
+
+git add index.html about.html
+  Stages the files, i.e. puts them in the "staging area" so they go into the next commit.
+
+git commit -m "initial commit"
+  Saves a snapshot of the staged files into history with a message.
+
+git commit -am "update index"
+  -a stages all modified tracked files automatically, then commits them. Used after editing index.html.
+
+git branch feature
+  Creates a new branch called "feature". A branch is just a pointer to a commit,
+  so work can happen separately without touching main.
+
+git switch feature   (or: git checkout feature)
+  Moves to the feature branch. New commits now go on feature, not main.
+  (git switch -c feature does both create + switch in one step.)
+
+git commit -am "update about"
+  Commits the about.html change on the feature branch only.
+
+git switch main   (or: git checkout main)
+  Goes back to main. The about.html change is not here yet.
+
+git merge --no-ff feature -m "merge feature"
+  Brings the feature branch's commits into main. --no-ff forces a merge commit
+  so the branch is visible in history instead of being flattened.
+
+git log --oneline --graph --all
+  Shows commit history, one line per commit, with a graph of the branches and merge.
+
+git log
+  Full history with author, date and message for each commit.
+
+STEP 3 - .gitignore
+
+(created .gitignore containing:  *.log  and  temp/ )
+
+git add .gitignore
+git commit -m "add gitignore"
+  Commits the ignore rules. After this, debug.log and the temp/ folder no longer
+  show up in git status and can't be added by accident.
+
+git status --short
+  Short status; used to check that ignored files do not appear.
+
+STEP 4 - Undo Operation
+
+git add contact.html
+git commit -m "add contact page"
+  An extra commit made just to undo it.
+
+git revert --no-edit HEAD
+  Undoes the last commit by creating a NEW commit that does the opposite
+  (deletes contact.html). History is kept, so it is safe for pushed/shared repos.
+  --no-edit uses the default message "Revert ...".
+
+git log --oneline
+  Shows both "add contact page" and the "Revert" commit, and contact.html is gone from the folder.
+
+(Alternative: git reset --hard HEAD~1 moves the branch back one commit and deletes it
+ from history. Not used here because it rewrites history and the undo would not be visible on GitHub.)
+
+STEP 5 - GitHub Integration
+
+gh repo create SDP-SGA2 --public --source=. --remote=origin
+  GitHub CLI: creates a public repo on GitHub from this local folder and adds it as remote "origin".
+  (Same as making the repo on github.com then running: git remote add origin <url>)
+
+git remote -v
+  Lists remotes to confirm origin points to the GitHub repo.
+
+git push -u origin main
+git push origin feature
+  Uploads the commits to GitHub. -u sets origin/main as upstream so later
+  "git push"/"git pull" work without arguments. Feature branch pushed too to show branch activity.
+
+STEP 6 - This File
+
+git add git_commands.txt
+git commit -m "add git commands"
+git push
+  Commits and pushes this documentation file.
